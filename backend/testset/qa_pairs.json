@@ -1,0 +1,234 @@
+[
+  {
+    "id": "pubmedqa_asthma_no_4",
+    "question": "Is routine chest radiography after transbronchial biopsy necessary?",
+    "reference_answer": "We conclude that routine CXR after bronchoscopy with TBB is necessary only in patients with symptoms suggestive of pneumothorax. In asymptomatic patients, pneumothorax is rare and usually small, so routine CXR is not necessary in this category of patients.",
+    "final_answer": "no",
+    "category": "asthma",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_diabetes_no_4",
+    "question": "Do women with ovaries of polycystic morphology without any other features of PCOS benefit from short-term metformin co-treatment during IVF?",
+    "reference_answer": "There appears to be no benefit in metformin co-treatment before and during IVF in women with PCO without any other features of PCOS. Clinical Trials.gov: NCT01046032.",
+    "final_answer": "no",
+    "category": "diabetes",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_diabetes_yes_1",
+    "question": "Serum angiotensin-converting enzyme and frequency of severe hypoglycaemia in Type 1 diabetes: does a relationship exist?",
+    "reference_answer": "The present survey showed a weak relationship between serum ACE and the frequency of SH, the clinical relevance of which is unclear. This limits the proposed role for serum ACE as an index of risk for SH.",
+    "final_answer": "yes",
+    "category": "diabetes",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_asthma_yes_0",
+    "question": "Fast foods - are they a risk factor for asthma?",
+    "reference_answer": "Frequent consumption of hamburgers showed a dose-dependent association with asthma symptoms, and frequent takeaway consumption showed a similar association with BHR.",
+    "final_answer": "yes",
+    "category": "asthma",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_hypertension_yes_1",
+    "question": "Subclavian steal syndrome: can the blood pressure difference between arms predict the severity of steal?",
+    "reference_answer": "Brachial systolic blood pressure difference is related to the severity of SSS and can be used as a screening tool for SSS. However, it performed better in severe steal than milder steal phenomena.",
+    "final_answer": "yes",
+    "category": "hypertension",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_depression_yes_0",
+    "question": "Does depression diagnosis and antidepressant prescribing vary by location?",
+    "reference_answer": "New depression diagnosis and antidepressant use was shown to be less likely in areas of higher own-ethnic density for some, but not all, ethnic groups.",
+    "final_answer": "yes",
+    "category": "depression",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_depression_yes_1",
+    "question": "Does age moderate the effect of personality disorder on coping style in psychiatric inpatients?",
+    "reference_answer": "This study found that influences on coping were multifactorial and moderated by age. These factors have implications for interventions designed to enhance coping strategies.",
+    "final_answer": "yes",
+    "category": "depression",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_cancer_no_3",
+    "question": "Preoperative staging of patients with liver metastases of colorectal carcinoma. Does PET/CT really add something to multidetector CT?",
+    "reference_answer": "PET/CT has a limited role in hepatic staging of LMCRC. Although PET-CT has higher sensitivity for the detection of extrahepatic disease in some anatomic locations, its results are hampered by its low PPV. PET/CT provided additional useful information in 8% of the cases but also incorrect and potentially harmful data in 9% of the staging. Our findings support a more selective use of PET/CT, basically in patients with high risk of local recurrence.",
+    "final_answer": "no",
+    "category": "cancer",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_cancer_yes_0",
+    "question": "Preoperative platelet count in esophageal squamous cell carcinoma: is it a prognostic factor?",
+    "reference_answer": "Preoperative platelet count is a predictive factor for long-term survival in ESCC, especially in nodal-positive patients. We conclude that 205 (\u00d710(9)/L) may be the optimum cutoff point for platelet count in predicting survival in ESCC patients.",
+    "final_answer": "yes",
+    "category": "cancer",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_hypertension_no_4",
+    "question": "Is human cytomegalovirus infection associated with hypertension?",
+    "reference_answer": "In this nationally representative population-based survey, HCMV seropositivity is associated with hypertension in women in the NHANES population. This association is largely explained by the association of hypertension with age and the increase in past exposure to HCMV with age.",
+    "final_answer": "no",
+    "category": "hypertension",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_depression_no_5",
+    "question": "Does the use of atypical antipsychotics as adjunctive therapy in depression result in cost savings?",
+    "reference_answer": "The results show no evidence that AAPs used as second-line treatment for depression results in overall cost savings or lower inpatient and ED visits compared to other treatment strategies.",
+    "final_answer": "no",
+    "category": "depression",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_cancer_yes_1",
+    "question": "Do nomograms designed to predict biochemical recurrence (BCR) do a better job of predicting more clinically relevant prostate cancer outcomes than BCR?",
+    "reference_answer": "Currently available nomograms used to predict BCR accurately predict PCSM and other more clinically relevant endpoints. Moreover, not only do they significantly predict PCSM, but do so with generally greater accuracy than BCR.",
+    "final_answer": "yes",
+    "category": "cancer",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_asthma_yes_1",
+    "question": "Do inhaled steroids differ from cromones in terms of hospital admission rates for asthma in children?",
+    "reference_answer": "Our results suggest that inhaled steroids are better than cromones in preventing admissions for asthma when two provinces with different practices for maintenance medication of steady-state asthma were compared.",
+    "final_answer": "yes",
+    "category": "asthma",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_depression_no_3",
+    "question": "Does a family meetings intervention prevent depression and anxiety in family caregivers of dementia patients?",
+    "reference_answer": "This study did not demonstrate preventive effects of family meetings on the mental health of family caregivers. Further research should determine whether this intervention might be more beneficial if provided in a more concentrated dose, when applied for therapeutic purposes or targeted towards subgroups of caregivers.",
+    "final_answer": "no",
+    "category": "depression",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_diabetes_yes_2",
+    "question": "Is scintigraphy a guideline method in determining amputation levels in diabetic foot?",
+    "reference_answer": "We conclude that 3-phase bone scintigraphy prior to surgery could be a useful method to determine the amputation level in a diabetic foot. We conclude that further, comparative, more comprehensive, long-term, and controlled studies are required.",
+    "final_answer": "yes",
+    "category": "diabetes",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_hypertension_yes_0",
+    "question": "Is there a connection between sublingual varices and hypertension?",
+    "reference_answer": "An association was found between sublingual varices and hypertension. Examining the lateral borders of the tongue is easily done, causes no harm and could be a valuable method for the dental profession to take active part in preventive healthcare.",
+    "final_answer": "yes",
+    "category": "hypertension",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_depression_yes_2",
+    "question": "Is duration of psychological treatment for depression related to return into treatment?",
+    "reference_answer": "The results suggest that a longer duration of treatment may prevent return into mental health care in some groups. However, because of the design of the study, no causal inference can be drawn. Further research, preferably in a RCT, is needed to determine whether the trend towards lower intensity treatments is associated with repeated mental health care use.",
+    "final_answer": "yes",
+    "category": "depression",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_cancer_no_4",
+    "question": "Epidural analgesia for surgical treatment of peritoneal carcinomatosis: a risky technique?",
+    "reference_answer": "In this series of 35 patients, the use of epidural analgesia for HIPEC does not seem to be associated with a worse risk of haemodynamic instability, spinal haematoma, meningitis or epidural abscess. HIPEC with platinum salt is not incompatible with the safety of epidural analgesia, with an optimized fluid management peroperatively and the following of perimedullary anesthesia practice guidelines.",
+    "final_answer": "no",
+    "category": "cancer",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_cancer_no_5",
+    "question": "Cancer of the buccal mucosa: are margins and T-stage accurate predictors of local control?",
+    "reference_answer": "Local excision of T1 and T2 buccal mucosa cancers with pathologically negative margins had a high rate of local recurrence in our series. Low T-stage and negative margins are not adequate predictors of local control. Even early buccal tumors may benefit from adjuvant therapy to enhance local control.",
+    "final_answer": "no",
+    "category": "cancer",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_depression_no_4",
+    "question": "Are women with major depression in pregnancy identifiable in population health data?",
+    "reference_answer": "No single data source is likely to provide a complete health profile for an individual. For women with depression in pregnancy and dispensed antidepressants, the hospital admission data do not adequately capture all cases.",
+    "final_answer": "no",
+    "category": "depression",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_cancer_yes_2",
+    "question": "Does treatment duration affect outcome after radiotherapy for prostate cancer?",
+    "reference_answer": "A proportionally longer treatment duration was identified as an adverse factor in low-risk patients. Treatment breaks resulting in a NTDR of>/=33% (e.g., four or more breaks during a 40-fraction treatment, 5 d/wk) should be avoided.",
+    "final_answer": "yes",
+    "category": "cancer",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_asthma_no_5",
+    "question": "Metered-dose inhalers. Do health care providers know what to teach?",
+    "reference_answer": "This study confirms that a large percentage of patients use metered-dose inhalers improperly. It also demonstrates a significant lack of understanding by health care providers of the proper use of metered-dose inhalers. Furthermore, this study supports the use of respiratory care practitioners in the outpatient setting, since they were the most proficient among all the health care providers in the proper use of metered-dose inhalers.",
+    "final_answer": "no",
+    "category": "asthma",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_hypertension_yes_2",
+    "question": "Are stroke patients' reports of home blood pressure readings reliable?",
+    "reference_answer": "This group of elderly stroke patients were able to record their BPs reliably at home. Any bias was small and would be unlikely to affect management. Since BP readings in a GP surgery are often a poor indication of true BP, GPs might consider using hypertensive patients' records of home BP monitoring to help guide treatment decisions.",
+    "final_answer": "yes",
+    "category": "hypertension",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_diabetes_yes_0",
+    "question": "Starting insulin in type 2 diabetes: continue oral hypoglycemic agents?",
+    "reference_answer": "Bedtime NPH insulin added to maximal therapy with sulfonylurea and metformin is an effective, simple, well-tolerated approach for patients with uncontrolled type 2 diabetes.",
+    "final_answer": "yes",
+    "category": "diabetes",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_asthma_no_3",
+    "question": "Prescriptions as a proxy for asthma in children: a good choice?",
+    "reference_answer": "When additional validation studies were taken into account, asthma medications were found to be prescribed not only for asthma but also for other respiratory diseases. In addition, not all children with current asthma had prescriptions. We therefore conclude that asthma medications are therefore not a good proxy for the disease.",
+    "final_answer": "no",
+    "category": "asthma",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_diabetes_no_5",
+    "question": "Do lipids, blood pressure, diabetes, and smoking confer equal risk of myocardial infarction in women as in men?",
+    "reference_answer": "This large study of the major risk factors compared between the sexes demonstrates similar relative risk of myocardial infarction associated with cholesterol for both sexes, however, the relative risk is higher in women for many other risk factors such as smoking, diabetes, elevated triglycerides and left ventricular hypertrophy.",
+    "final_answer": "no",
+    "category": "diabetes",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_asthma_yes_2",
+    "question": "Is dexamethasone an effective alternative to oral prednisone in the treatment of pediatric asthma exacerbations?",
+    "reference_answer": "The current literature suggests that dexamethasone can be used as an effective alternative to prednisone in the treatment of mild to moderate acute asthma exacerbations in children, with the added benefits of improved compliance, palatability, and cost. However, more research is needed to examine the role of dexamethasone in hospitalized children.",
+    "final_answer": "yes",
+    "category": "asthma",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_hypertension_no_3",
+    "question": "Do acute changes in heart rate by isoproterenol affect aortic stiffness in patients with hypertension?",
+    "reference_answer": "Aortic stiffness was not affected by acute changes in HR produced by isoproterenol which suggests that it is not necessary to consider acute changes in HR when measuring aortic PWV.",
+    "final_answer": "no",
+    "category": "hypertension",
+    "source": "pubmedqa"
+  },
+  {
+    "id": "pubmedqa_diabetes_no_3",
+    "question": "The insertion allele of the ACE gene I/D polymorphism. A candidate gene for insulin resistance?",
+    "reference_answer": "We conclude that increased cardiovascular risk of the DD genotype is not mediated through insulin resistance or abnormalities in fibrinolysis. Conversely, we report an increased sensitivity in NIDDM subjects with the ACE DD genotype.",
+    "final_answer": "no",
+    "category": "diabetes",
+    "source": "pubmedqa"
+  }
+]

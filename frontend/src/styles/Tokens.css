@@ -1,0 +1,55 @@
+/* ── Design Tokens ─────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --bg-0: #090b0e;
+  --bg-1: #0f1217;
+  --bg-2: #161a22;
+  --bg-3: #1d222c;
+  --bg-4: #242a36;
+
+  /* Borders */
+  --border:    #252b38;
+  --border-hi: #353d4f;
+
+  /* Text */
+  --text-0: #eef0f4;
+  --text-1: #9aa3b5;
+  --text-2: #555f75;
+  --text-3: #353d4f;
+
+  /* Semantic colors */
+  --green:     #00d084;
+  --green-dim: rgba(0, 208, 132, 0.10);
+  --green-hi:  rgba(0, 208, 132, 0.20);
+  --amber:     #f5a623;
+  --amber-dim: rgba(245, 166, 35, 0.10);
+  --amber-hi:  rgba(245, 166, 35, 0.20);
+  --red:       #e8445a;
+  --red-dim:   rgba(232, 68, 90, 0.10);
+  --red-hi:    rgba(232, 68, 90, 0.20);
+  --blue:      #4d9cff;
+  --blue-dim:  rgba(77, 156, 255, 0.10);
+  --teal:      #00bfa5;
+  --teal-dim:  rgba(0, 191, 165, 0.10);
+
+  /* Strategy accent colors */
+  --strat-a: #4d9cff;
+  --strat-b: #00bfa5;
+  --strat-c: #f5a623;
+
+  /* Typography */
+  --font-display: 'DM Serif Display', serif;
+  --font-ui:      'Syne', sans-serif;
+  --font-mono:    'JetBrains Mono', monospace;
+
+  /* Spacing */
+  --nav-h: 58px;
+  --page-pad: 32px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur: 0.18s;
+}
