@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+chroma_store/
+node_modules/
+venv/
+*.egg-info/
+postgres_data/
