@@ -11,6 +11,15 @@ Medical RAG evaluation platform for benchmarking hallucination risk across multi
 
 > [!IMPORTANT]
 > This project is built for RAG benchmarking, debugging, and research workflows. It is not a clinical decision system and should not be used for direct patient care without human review.
+## Demo Video 
+
+
+ 
+
+https://github.com/user-attachments/assets/add2836c-a508-4c9b-b07d-b7ac9bdbac1f
+
+
+
 
 ## Why this exists
 
