@@ -1,286 +1,274 @@
 # MedRAG Eval
 
-**A medical RAG hallucination benchmarking platform that evaluates three retrieval pipeline architectures across five clinical domains — measuring hallucination risk at the claim level so teams can make evidence-based deployment decisions.**
+![Frozen Questions](https://img.shields.io/badge/frozen_questions-29-2563eb?style=for-the-badge)
+![Benchmark Runs](https://img.shields.io/badge/benchmark_runs-87-0f766e?style=for-the-badge)
+![Clinical Domains](https://img.shields.io/badge/clinical_domains-5-f59e0b?style=for-the-badge)
+![Backend](https://img.shields.io/badge/backend-FastAPI-059669?style=for-the-badge)
+![Frontend](https://img.shields.io/badge/frontend-React%20%2B%20Vite-0284c7?style=for-the-badge)
+![Storage](https://img.shields.io/badge/storage-PostgreSQL%20%2B%20Chroma-7c3aed?style=for-the-badge)
 
-Most RAG systems are evaluated with a single accuracy score. MedRAG Eval goes deeper: every LLM answer is decomposed into atomic claims, each claim is verified against retrieved context, and the failure is traced back to its source — retrieval gap or LLM generation error. The result is a diagnostic system, not just a scorecard.
+Medical RAG evaluation platform for benchmarking hallucination risk across multiple retrieval strategies. Instead of stopping at answer-level correctness, MedRAG Eval breaks a response into claims, checks whether those claims are grounded in retrieved context, and surfaces whether a bad result came from retrieval or generation.
 
----
+> [!IMPORTANT]
+> This project is built for RAG benchmarking, debugging, and research workflows. It is not a clinical decision system and should not be used for direct patient care without human review.
 
-## The problem this solves
+## Why this exists
 
-RAG systems deployed in medical contexts hallucinate silently. A system can retrieve the right documents and still generate incorrect claims. Traditional evaluation catches this only at the answer level — "was the answer correct?" — which tells you nothing about *why* it failed or *where* to fix it.
+Most RAG demos report one score and call it evaluation. That is not enough for medical QA.
 
-MedRAG Eval measures at the claim level: each atomic assertion in a generated answer is independently verified against the retrieved context. This surfaces the exact failure mode — whether the retrieval pipeline missed the right information, or whether the LLM ignored correct information and generated something unsupported.
+MedRAG Eval is designed to answer the questions teams actually need during deployment:
 
----
+- Did the system retrieve the right evidence?
+- Did the model stay grounded in that evidence?
+- Which chunking strategy is safer for a given domain?
+- When a run fails, is the problem corpus coverage, retrieval quality, or generation drift?
 
-## Architecture
+## What the product includes
 
-Three retrieval strategies are benchmarked against the same generation layer, embedding model, and evaluation suite. The only variable is how documents are chunked and retrieved.
+| Surface | What it does |
+| --- | --- |
+| `Query Runner` | Runs the same question through all 3 strategies side by side. |
+| `Benchmark Results` | Reads the frozen benchmark JSON and shows per-question, per-strategy outputs. |
+| `Score Heatmap` | Compares average faithfulness, relevancy, precision, recall, latency, and failure distribution. |
+| `Failure Explorer` | Filters low-faithfulness runs and inspects claim-level hallucinations. |
+| `Trace Viewer` | Shows retrieval provenance, metric breakdown, and claim support for a single run. |
 
-```
-Question
-    │
-    ├── Strategy A: Fixed Chunking
-    │       200-word blocks, 40-word overlap
-    │       Simple baseline — predictable, fast
-    │
-    ├── Strategy B: Semantic Chunking
-    │       Splits at topic boundaries using embeddings
-    │       Coherent chunks — better context quality
-    │
-    └── Strategy C: Parent-Child Chunking
-            Child chunks (100w) embedded for retrieval precision
-            Parent chunks (400w) returned to LLM for full context
-            Decouples retrieval unit from generation unit
-                │
-                ▼
-        Generation (same for all strategies)
-        Groq — llama-3.3-70b-versatile — temperature=0
-                │
-                ▼
-        Evaluation
-        ├── RAGAS: faithfulness, answer relevancy,
-        │         context precision, context recall
-        ├── DeepEval: claim-level hallucination detection
-        └── Failure source diagnosis: retrieval vs LLM
-                │
-                ▼
-        PostgreSQL — runs, metrics, claims, traces
-                │
-                ▼
-        React Dashboard
-        ├── Score Heatmap
-        ├── Failure Explorer
-        ├── Trace Viewer
-        └── Query Runner
-```
+## Benchmark snapshot
 
----
+The snapshot below is taken from the checked-in file [`backend/testset/benchmark_results.json`](backend/testset/benchmark_results.json), not from placeholder copy.
 
-## Benchmark findings
+| Snapshot | Value |
+| --- | --- |
+| Eval set | 29 frozen PubMedQA questions |
+| Total runs | 87 strategy evaluations |
+| Domains | asthma, cancer, depression, diabetes, hypertension |
+| Retrieval corpus | ChatDoctor-HealthCareMagic-100k |
+| Indexed size | 500 records per category |
+| Strategies | fixed chunking, semantic chunking, parent-child chunking |
 
-**Evaluated on:** 28 frozen PubMedQA yes/no questions × 3 strategies = 84 total runs across 5 clinical domains (diabetes, hypertension, asthma, depression, cancer).
+### Strategy leaderboard
 
-**Corpus:** ChatDoctor-HealthCareMagic-100k — 500 records per category, indexed separately per strategy into ChromaDB with cosine similarity.
+| Strategy | Primary strength | Accuracy | Faithfulness | Relevancy | Precision | Recall | Avg latency |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| `A - Fixed Chunking` | Best grounding | 51.7% | **73.0%** | **30.7%** | 48.8% | **46.4%** | 47.4s |
+| `B - Semantic Chunking` | Fastest + best retrieval precision | 55.2% | 69.0% | 19.2% | **50.8%** | 37.7% | **45.5s** |
+| `C - Parent-Child Chunking` | Best verdict accuracy | **58.6%** | 70.4% | 24.5% | 45.4% | 37.8% | 48.6s |
 
----
+### What the current benchmark says
 
-### Finding 1 — No single strategy wins all domains
+- Strategy C currently has the highest answer-level accuracy across the frozen benchmark.
+- Strategy A produces the strongest average grounding and the best average recall.
+- Strategy B is the fastest strategy in the shipped benchmark and has the highest retrieval precision.
+- No single strategy dominates every metric, which is exactly why the dashboard compares tradeoffs instead of declaring one universal winner.
 
-Domain performance is not uniform across strategies. Strategy B (semantic chunking) leads on diabetes and asthma where topic-coherent chunks improve context quality. Strategy A (fixed chunking) leads on hypertension and depression where the corpus has dense coverage and single-chunk answers are sufficient.
+### Domain view
 
-| Domain | Best strategy | Why |
-|---|---|---|
-| Diabetes | B — Semantic | Mechanism explanations benefit from coherent chunks |
-| Asthma | B — Semantic | Treatment protocols span multiple sentences |
-| Hypertension | A — Fixed | High corpus density, single-chunk answers sufficient |
-| Depression | A — Fixed | Symptom descriptions retrieved well by keyword overlap |
-| Cancer | None | All strategies fail — see Finding 2 |
+| Domain | Strongest current strategy | Reading of the result |
+| --- | --- | --- |
+| Asthma | `B - Semantic` | Ties best accuracy and edges out the others on faithfulness. |
+| Diabetes | `C - Parent-Child` | Ties best accuracy and has the strongest grounding. |
+| Hypertension | `B - Semantic` | Best accuracy with the strongest recall in this domain. |
+| Depression | `C - Parent-Child` | Ties best accuracy and slightly leads on faithfulness. |
+| Cancer | No clearly safe winner | Best accuracy is still only 50.0 percent, so this domain still needs human review. |
 
-**Deployment implication:** A single pipeline cannot be safely deployed across all clinical domains. Domain-specific routing is required.
+## What makes the evaluation different
 
----
+### 1. Claim-level checking
 
-### Finding 2 — Cancer is the highest-risk domain
+Each generated answer is decomposed into atomic claims and scored against retrieved context. That catches failures that answer-level grading can miss.
 
-Cancer queries hallucinate at 25–40% faithfulness across all three strategies, even when context recall reaches 100% on strategies A and C. The LLM generates unsupported claims even when the retrieved context directly addresses the question.
+### 2. Failure-source diagnosis
 
-This is a **pure generation failure** — not a retrieval failure. Switching chunking strategy does not fix it. The failure originates in the LLM's parametric memory overriding the grounding constraint.
-
-```
-Cancer domain — Strategy A
-  context_recall:  1.00   (right information retrieved)
-  faithfulness:    0.28   (LLM ignored it and hallucinated)
-  failure_source:  llm    (not retrieval)
-```
-
-**Deployment implication:** Cancer queries require human review or answer abstention regardless of pipeline architecture. No RAG configuration tested achieves safe faithfulness thresholds on this domain.
-
----
-
-### Finding 3 — Context recall plateaus at 0.4–0.5 across all strategies
-
-Context precision is near-perfect across all strategies (0.95–1.0) — the retrieval is finding the right documents. But context recall consistently plateaus at 0.4–0.5 — the retrieved context does not fully cover the reference answer.
-
-This is a **corpus gap**, not a retrieval failure. The ChatDoctor corpus contains patient-doctor conversations, not clinical guidelines. PubMedQA reference answers draw on guideline-level knowledge that the corpus does not contain.
-
-Switching strategies does not close this gap. Extending the corpus with indexed clinical guidelines (NICE, WHO, UpToDate) would directly raise recall.
-
----
-
-### Finding 4 — Faithfulness vs relevancy is a real deployment tradeoff
-
-Strict grounding constraints (forcing the LLM to answer only from retrieved context) produce high faithfulness but low answer relevancy. The LLM gives safe, grounded answers that do not fully address what was asked.
-
-Relaxing the grounding constraint raises relevancy but introduces hallucination risk. There is no configuration that maximises both simultaneously.
-
-```
-Strict prompt:   faithfulness ↑   answer_relevancy ↓
-Relaxed prompt:  faithfulness ↓   answer_relevancy ↑
-```
-
-**Deployment implication:** This tradeoff must be made explicitly. A system optimised for faithfulness is safer for clinical use. A system optimised for relevancy is more useful but less trustworthy. The right choice depends on whether the deployment context tolerates false negatives or false positives.
-
----
-
-### Finding 5 — Claim-level evaluation catches failures that answer-level evaluation misses
-
-A strategy that gives a correct yes/no verdict can still contain hallucinated claims. Strategy B correctly answers "Yes, inhaled corticosteroids are recommended for persistent asthma" — but one claim in the answer ("ICS are recommended for controlling inflammation") is marked hallucinated because the retrieved context attributes that phrase to a different drug class.
-
-Answer-level evaluation would score this run as correct. Claim-level evaluation catches the internal inconsistency. For medical applications, this distinction is clinically significant.
-
----
-
-## Failure source diagnosis
-
-Each run is diagnosed using a two-condition classifier:
+Runs are labeled with an operational failure source:
 
 ```python
 if context_recall < 0.5:
-    failure_source = "retrieval"   # right info never retrieved
+    failure_source = "retrieval"
 elif faithfulness < 0.5:
-    failure_source = "llm"         # right info retrieved, LLM hallucinated
+    failure_source = "llm"
 else:
-    failure_source = "none"        # pipeline working correctly
+    failure_source = "none"
 ```
 
-This surfaces in the Score Heatmap as a failure distribution donut per strategy, and in the Failure Explorer as a filterable column. Teams can use this to decide whether to improve retrieval (better chunking, larger corpus) or constrain generation (tighter prompting, output filtering).
+This lets you see whether to improve chunking, expand the corpus, or tighten generation behavior.
 
----
+### 3. Same question, same eval stack, three retrieval strategies
+
+All strategies share the same benchmark set and evaluation flow. The core difference is retrieval architecture:
+
+- `Strategy A`: fixed 200-word chunks with overlap
+- `Strategy B`: semantic boundary-aware chunks
+- `Strategy C`: child chunks for retrieval, parent chunks for generation
+
+## System architecture
+
+```text
+Question
+  -> Strategy A / B / C retrieval
+  -> grounded answer generation
+  -> RAGAS metrics
+  -> DeepEval claim verification
+  -> failure-source diagnosis
+  -> PostgreSQL + file-backed benchmark outputs
+  -> React dashboard + FastAPI endpoints
+```
 
 ## Tech stack
 
-| Component | Technology | Why |
-|---|---|---|
-| LLM | Groq — llama-3.3-70b-versatile | Fast inference, no local GPU for generation |
-| Embeddings | nomic-embed-text via Ollama | Local, no API cost, consistent with indexing |
-| Vector DB | ChromaDB | 3 persistent collections, cosine similarity |
-| RAGAS evaluation | RAGAS 0.1.x | 4 standard RAG metrics, LangChain-compatible |
-| Claim evaluation | Custom DeepEval pipeline | Atomic claim extraction + batch verification |
-| Backend | FastAPI + Python | 5 endpoints, async-compatible |
-| Database | PostgreSQL | 4 tables: runs, metrics, claims, traces |
-| Frontend | React + Vite + Recharts | 4 pages, Axios hooks, live benchmark polling |
+| Layer | Technology |
+| --- | --- |
+| API | FastAPI |
+| Frontend | React 19 + Vite + Recharts |
+| Database | PostgreSQL |
+| Vector store | ChromaDB |
+| Embeddings | Ollama `nomic-embed-text` |
+| LLM access | Local Ollama by default, Groq supported through compatibility layer |
+| Evaluation | RAGAS + custom DeepEval claim pipeline |
 
----
+## Run locally
 
-## Project structure
+### Prerequisites
 
-```
-MedRag-Eval/
-├── backend/
-│   ├── main.py                      5 API endpoints
-│   ├── config.py                    Groq + Ollama + ChromaDB config
-│   ├── groq_compat.py               LRU-cached client + retry logic
-│   ├── benchmark_runner.py          Resumable full testset runner
-│   ├── pipelines/
-│   │   ├── retrieval.py             MMR reranking + keyword overlap scoring
-│   │   ├── strategy_a.py            Fixed chunking pipeline
-│   │   ├── strategy_b.py            Semantic chunking pipeline
-│   │   └── strategy_c.py            Parent-child chunking pipeline
-│   ├── evaluation/
-│   │   ├── ragas_runner.py          4 RAGAS metrics + nest_asyncio fix
-│   │   ├── deepeval_runner.py       Claim extraction + batch verification
-│   │   └── benchmark_metrics.py     Binary verdict extraction
-│   ├── ingestion/
-│   │   ├── fetcher.py               ChatDoctor + PubMedQA loaders
-│   │   └── indexer.py               3 ChromaDB collections
-│   ├── db/
-│   │   ├── models.py                Run, Metric, Claim, Trace tables
-│   │   └── session.py               Connection pool + FastAPI dependency
-│   └── testset/
-│       ├── qa_pairs.json            28 frozen PubMedQA questions
-│       ├── benchmark_results.json   84-run results
-│       └── benchmark_progress.json  Resumable progress tracker
-├── frontend/
-│   └── src/
-│       ├── api/client.js            Axios + interceptors
-│       ├── hooks/                   useRunQuery, useRuns, useSummary
-│       ├── components/ui/           Badge, MetricBar, RiskGauge, ScoreCell
-│       ├── components/charts/       FailureDonut (Recharts)
-│       ├── components/layout/       NavBar, PageHeader
-│       └── pages/
-│           ├── QueryRunner.jsx      Live 3-strategy comparison
-│           ├── ScoreHeatmap.jsx     RAGAS metrics + deployment recommendation
-│           ├── FailureExplorer.jsx  Filterable claim breakdown
-│           └── TraceViewer.jsx      Full retrieval provenance
-```
+- Python 3.11 recommended
+- Node.js 18 or newer
+- Docker Desktop or a local PostgreSQL instance
+- Ollama
 
----
-
-## Dashboard pages
-
-**Query Runner** — Submit any medical question and see all three strategies answer simultaneously. Live timer, animated score bars, RiskGauge SVG, and claim-level breakdown per strategy side by side.
-
-**Score Heatmap** — Color-coded RAGAS metrics per strategy (green ≥ 80%, amber ≥ 50%, red < 50%). Failure distribution donuts showing retrieval vs LLM failure split. Benchmark findings panel with all 5 key findings. Deployment recommendation panel showing which strategy to use per domain.
-
-**Failure Explorer** — Filterable table of all runs by strategy, domain, and faithfulness threshold. Click any row to expand the full claim breakdown with supporting context per claim.
-
-**Trace Viewer** — Split panel showing the full execution trace: retrieved contexts with similarity scores and MMR ranking, metric tiles, and claim analysis with the specific context chunk that supported or failed each assertion.
-
----
-
-## How to run
-
-**Prerequisites:** Python 3.11+, Node.js 18+, PostgreSQL, Ollama
+### 1. Start PostgreSQL
 
 ```bash
-# 1. Pull the embedding model
-ollama pull nomic-embed-text
+docker compose up -d postgres
+```
 
-# 2. Set environment variables
+The included `docker-compose.yml` starts PostgreSQL on `localhost:5432` with database name `medrag`.
+
+### 2. Create your environment file
+
+Copy [`.env.example`](.env.example) to `.env` and update values if needed.
+
+Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+macOS / Linux:
+
+```bash
 cp .env.example .env
-# Add GROQ_API_KEY and DATABASE_URL
+```
 
-# 3. Install backend dependencies
+### 3. Install Ollama models
+
+```bash
+ollama pull nomic-embed-text
+ollama pull llama3.1:latest
+```
+
+### 4. Install backend dependencies
+
+```bash
+python -m venv .venv
+```
+
+Windows PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
+```
 
-# 4. Index the corpus (first run only — takes ~30 mins)
+macOS / Linux:
+
+```bash
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 5. Install frontend dependencies
+
+```bash
+cd frontend
+npm install
+cd ..
+```
+
+### 6. Build the vector indexes
+
+```bash
 python -m backend.ingestion.indexer
+```
 
-# 5. Start the backend
+This creates the three Chroma collections used by the benchmarked pipelines.
+
+### 7. Start the backend
+
+```bash
 uvicorn backend.main:app --reload
+```
 
-# 6. Start the frontend
-cd frontend && npm install && npm run dev
+Backend API docs: `http://127.0.0.1:8000/docs`
 
-# 7. (Optional) Run the full benchmark
+### 8. Start the frontend
+
+In a new terminal:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Dashboard: `http://127.0.0.1:3000`
+
+## Run the frozen benchmark
+
+Once the backend is running, execute:
+
+```bash
 python -m backend.benchmark_runner
 ```
 
-Open `http://localhost:3000` for the dashboard.
-Open `http://localhost:8000/docs` to explore the API directly.
+Artifacts written by the runner:
 
----
+- [`backend/testset/qa_pairs.json`](backend/testset/qa_pairs.json): frozen benchmark questions
+- [`backend/testset/benchmark_progress.json`](backend/testset/benchmark_progress.json): resumable progress state
+- [`backend/testset/benchmark_results.json`](backend/testset/benchmark_results.json): per-question benchmark output
+
+## Optional data regeneration
+
+If you want to rebuild the evaluation sets instead of using the shipped files:
+
+```bash
+python -m backend.ingestion.fetcher
+```
+
+## Repository layout
+
+```text
+backend/
+  main.py                  FastAPI endpoints for query, history, traces, and benchmark summaries
+  benchmark_runner.py      Resumable benchmark runner for the frozen test set
+  ingestion/fetcher.py     Dataset loading and frozen eval-set generation
+  ingestion/indexer.py     Chroma indexing for all three strategies
+  pipelines/               Retrieval and generation logic
+  evaluation/              RAGAS and claim-level evaluation code
+  db/                      SQLAlchemy models and session management
+
+frontend/
+  src/pages/               Query Runner, Benchmark Results, Score Heatmap, Failure Explorer, Trace Viewer
+  src/components/          Shared UI, charts, layout, and metric cells
+```
 
 ## Known limitations
 
-**TruLens incompatibility** — TruLens 0.28.0 is not compatible with Python 3.12. The tracing layer is written and documented but disabled by default. Running on Python 3.11 enables it.
+- The shipped benchmark is still small. It is good for comparative debugging, not for broad clinical claims.
+- The retrieval corpus is conversational medical data, not guideline-grade evidence.
+- Provider choice matters. The codebase supports both local Ollama and Groq-backed workflows, so scores can move when model settings change.
+- Some benchmark runs may not receive a failure label when upstream metrics are unavailable.
 
-**Strategy C redundant chunks** — Parent-child retrieval occasionally returns near-duplicate parent chunks when multiple children from the same parent are top-ranked. MMR reranking (λ=0.7, similarity threshold=0.92) partially addresses this but does not eliminate it entirely. Adding a stricter deduplication pass before generation would close this gap.
+## Practical use cases
 
-**Corpus coverage ceiling** — Context recall plateaus at 0.4–0.5 because the ChatDoctor corpus is patient-doctor conversation data, not clinical guidelines. Recall cannot exceed what the corpus contains. Extending with NICE guidelines or UpToDate would directly improve this metric.
-
-**Groq rate limits** — The benchmark runner uses a 30-second inter-question delay and 15-second inter-strategy delay to stay within Groq's free tier token limits. These delays extend total benchmark runtime to approximately 90 minutes for 28 questions.
-
----
-
-## Evaluation methodology
-
-**Eval set:** 28 questions sampled from PubMedQA (pqa_labeled split), filtered to yes/no decisions only, balanced across 5 domains (3 yes + 3 no per domain where available), frozen to disk before benchmarking to prevent contamination across runs.
-
-**Corpus:** ChatDoctor-HealthCareMagic-100k, 500 records per category, held-out eval split separated before indexing to prevent leakage. The same 500 records are indexed into all three ChromaDB collections — the corpus is constant, only the chunking strategy varies.
-
-**Reproducibility:** Generation temperature is fixed at 0 across all runs. The same RAGAS LLM judge (llama-3.3-70b-versatile) is used for all metric computation. Embedding model (nomic-embed-text) is the same at index time and query time. Results are deterministic given the same Groq model weights.
-
----
-
-## Deployment recommendation
-
-Based on benchmark results, the following deployment guidance applies:
-
-**Deploy Strategy B (Semantic Chunking)** for diabetes and asthma queries. Semantic chunking preserves clinical reasoning chains that fixed boundaries break mid-sentence. Faithfulness and precision are consistently higher in these domains.
-
-**Deploy Strategy A (Fixed Chunking)** for hypertension and depression queries. Lower latency, simpler infrastructure, and the corpus density in these domains means coherent chunks are not required for correct retrieval.
-
-**Do not deploy any strategy** for cancer queries without a human review layer. No configuration tested achieves acceptable faithfulness thresholds. The failure is generative, not retrievable — the LLM's parametric knowledge overrides the grounding constraint. Enforced abstention or mandatory clinician review is the only safe path.
+- Compare chunking strategies before deploying a medical RAG assistant.
+- Debug whether a failure came from retrieval coverage or model generation.
+- Build a dashboard-friendly benchmark artifact that non-ML stakeholders can review.
+- Create a repeatable local workflow for RAG benchmarking without custom observability tooling from scratch.
