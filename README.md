@@ -54,7 +54,7 @@ Three retrieval strategies are benchmarked against an identical generation layer
 
 ```
                      ┌────────────────────────────┐
-                     │      Medical Question       │
+                     │      Medical Question      │
                      └─────────────┬──────────────┘
                                    │
           ┌────────────────────────┼───────────────────────┐
@@ -73,10 +73,10 @@ Three retrieval strategies are benchmarked against an identical generation layer
                                  │
                                  ▼
                   ┌──────────────────────────────┐
-                  │       ChromaDB Retrieval      │
-                  │   nomic-embed-text embeddings │
-                  │   Cosine similarity + MMR     │
-                  │   Keyword overlap reranking   │
+                  │       ChromaDB Retrieval     │
+                  │   nomic-embed-text embeddings│
+                  │   Cosine similarity + MMR    │
+                  │   Keyword overlap reranking  │
                   └──────────────┬───────────────┘
                                  │
                                  ▼
@@ -98,14 +98,14 @@ Three retrieval strategies are benchmarked against an identical generation layer
                                  │
                                  ▼
                   ┌──────────────────────────────┐
-                  │          PostgreSQL           │
+                  │          PostgreSQL          │
                   │  runs · metrics · claims ·   │
-                  │  traces — atomic transaction  │
+                  │  traces — atomic transaction │
                   └──────────────┬───────────────┘
                                  │
                                  ▼
                   ┌──────────────────────────────┐
-                  │       React Dashboard         │
+                  │       React Dashboard        │
                   │  Score Heatmap               │
                   │  Failure Explorer            │
                   │  Trace Viewer                │
